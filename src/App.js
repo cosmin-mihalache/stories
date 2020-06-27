@@ -4,7 +4,7 @@ import List from './components/List';
 import stories from './data/mock-data';
 
 const App = () => {
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState('React');
   // A
   function handleSearch(e) {
     // C
@@ -18,7 +18,7 @@ const App = () => {
   return (
     <div>
       <h1>Hello React</h1>
-      <Search onSearch={handleSearch} />
+      <Search search={searchTerm} onSearch={handleSearch} />
       <hr />
       <List list={searchedStories} />
     </div>
