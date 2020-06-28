@@ -5,9 +5,8 @@ import stories from './data/mock-data';
 
 const App = () => {
   const [searchTerm, setSearchTerm] = useState('React');
-  // A
+
   function handleSearch(e) {
-    // C
     setSearchTerm(e.target.value);
   }
 
