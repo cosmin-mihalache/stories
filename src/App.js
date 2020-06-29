@@ -4,10 +4,18 @@ import List from './components/List';
 import stories from './data/mock-data';
 
 const App = () => {
-  const [searchTerm, setSearchTerm] = useState('React');
+  const [searchTerm, setSearchTerm] = useState(
+    localStorage.getItem('search') || 'React'
+  );
+
+  React.useEffect(() => {
+    localStorage.setItem('search', searchTerm);
+  }, [searchTerm]);
 
   function handleSearch(e) {
     setSearchTerm(e.target.value);
+
+    //localStorage.setItem('search', e.target.value);
   }
 
   const searchedStories = stories.filter(function (story) {
