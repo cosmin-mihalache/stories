@@ -3,19 +3,22 @@ import Search from './components/Search';
 import List from './components/List';
 import stories from './data/mock-data';
 
-const App = () => {
-  const [searchTerm, setSearchTerm] = useState(
-    localStorage.getItem('search') || 'React'
-  );
+// custom hook
+const useSemiPersistentState = (key, initialState) => {
+  const [value, setValue] = useState(localStorage.getItem(key) || initialState);
 
   React.useEffect(() => {
-    localStorage.setItem('search', searchTerm);
-  }, [searchTerm]);
+    localStorage.setItem(key, value);
+  }, [value, key]);
+
+  return [value, setValue];
+};
+
+const App = () => {
+  const [searchTerm, setSearchTerm] = useSemiPersistentState('search', 'React');
 
   function handleSearch(e) {
     setSearchTerm(e.target.value);
-
-    //localStorage.setItem('search', e.target.value);
   }
 
   const searchedStories = stories.filter(function (story) {
