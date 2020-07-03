@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Search from './components/Search';
+import InputWithLabel from './components/InputWithLabel';
 import List from './components/List';
 import stories from './data/mock-data';
 
@@ -28,7 +28,12 @@ const App = () => {
   return (
     <div>
       <h1>Hello React</h1>
-      <Search search={searchTerm} onSearch={handleSearch} />
+      <InputWithLabel
+        id="search"
+        label="Search"
+        value={searchTerm}
+        onInputChange={handleSearch}
+      />
       <hr />
       <List list={searchedStories} />
     </div>
