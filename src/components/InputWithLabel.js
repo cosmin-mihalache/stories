@@ -1,15 +1,22 @@
 import React from 'react';
 
 //destructuring props {}
-const InputWithLabel = ({ id, label, value, type='text', onInputChange }) => {
+const InputWithLabel = ({
+  id,
+  value,
+  type = 'text',
+  onInputChange,
+  children,
+}) => {
   return (
     <>
-      <label htmlFor={id}>{label}</label>&nbsp;
+      <label htmlFor={id}>{children}</label>&nbsp;
       <input 
       id={id} 
       type={type} 
       value={value} 
-      onChange={onInputChange} />
+      onChange={onInputChange}
+      />
     </>
   );
 };
