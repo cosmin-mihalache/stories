@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import InputWithLabel from './components/InputWithLabel';
 import List from './components/List';
-import stories from './data/mock-data';
+import initialStories from './data/mock-data';
 
 // custom hook
 const useSemiPersistentState = (key, initialState) => {
@@ -16,6 +16,15 @@ const useSemiPersistentState = (key, initialState) => {
 
 const App = () => {
   const [searchTerm, setSearchTerm] = useSemiPersistentState('search', 'React');
+  const [stories, setStories] = useState(initialStories);
+
+  const handleRemoveStory = (item) => {
+    const newStories = stories.filter(
+      (story) => item.objectID !== story.objectID
+    );
+
+    setStories(newStories);
+  };
 
   function handleSearch(e) {
     setSearchTerm(e.target.value);
@@ -36,7 +45,7 @@ const App = () => {
         <strong>Search:</strong>
       </InputWithLabel>
       <hr />
-      <List list={searchedStories} />
+      <List list={searchedStories} onRemoveItem={handleRemoveStory} />
     </div>
   );
 };
