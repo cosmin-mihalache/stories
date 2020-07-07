@@ -1,13 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import InputWithLabel from './components/InputWithLabel';
 import List from './components/List';
-import initialStories from './data/mock-data';
+// import initialStories from './data/mock-data';
+import getAsyncStories from './data/fetch-data';
 
 // custom hook
 const useSemiPersistentState = (key, initialState) => {
   const [value, setValue] = useState(localStorage.getItem(key) || initialState);
 
-  React.useEffect(() => {
+  useEffect(() => {
     localStorage.setItem(key, value);
   }, [value, key]);
 
@@ -16,7 +17,13 @@ const useSemiPersistentState = (key, initialState) => {
 
 const App = () => {
   const [searchTerm, setSearchTerm] = useSemiPersistentState('search', 'React');
-  const [stories, setStories] = useState(initialStories);
+  const [stories, setStories] = useState([]);
+
+  useEffect(() => {
+    getAsyncStories().then((result) => {
+      setStories(result.data.stories);
+    });
+  }, []);
 
   const handleRemoveStory = (item) => {
     const newStories = stories.filter(
