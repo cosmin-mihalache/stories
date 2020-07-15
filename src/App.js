@@ -1,19 +1,10 @@
-import React, { useState, useEffect, useReducer } from 'react';
+import React, { useEffect, useReducer } from 'react';
 import InputWithLabel from './components/InputWithLabel';
 import List from './components/List';
-// import initialStories from './data/mock-data';
-import getAsyncStories from './data/fetch-data';
+//import getAsyncStories from './data/fetch-data';
+import useSemiPersistentState from './hooks/useSemiPersistentState';
 
-// custom hook
-const useSemiPersistentState = (key, initialState) => {
-  const [value, setValue] = useState(localStorage.getItem(key) || initialState);
-
-  useEffect(() => {
-    localStorage.setItem(key, value);
-  }, [value, key]);
-
-  return [value, setValue];
-};
+const API_ENDPOINT = 'https://hn.algolia.com/api/v1/search?query=';
 
 const storiesReducer = (state, action) => {
   switch (action.type) {
@@ -58,11 +49,13 @@ const App = () => {
 
   useEffect(() => {
     dispatchStories({ type: 'STORIES_FETCH_INIT' });
-    getAsyncStories()
+
+    fetch(`${API_ENDPOINT}react`)
+      .then((response) => response.json())
       .then((result) => {
         dispatchStories({
           type: 'STORIES_FETCH_SUCCESS',
-          payload: result.data.stories,
+          payload: result.hits,
         });
       })
 
