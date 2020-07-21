@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer, useCallback } from 'react';
+import React, { useEffect, useReducer, useCallback, useState } from 'react';
 import InputWithLabel from './components/InputWithLabel';
 import List from './components/List';
 import useSemiPersistentState from './hooks/useSemiPersistentState';
@@ -40,6 +40,7 @@ const storiesReducer = (state, action) => {
 
 const App = () => {
   const [searchTerm, setSearchTerm] = useSemiPersistentState('search', 'React');
+  const [url, setUrl] = useState(`${API_ENDPOINT}${searchTerm}`);
   const [stories, dispatchStories] = useReducer(storiesReducer, {
     data: [],
     isLoading: false,
@@ -47,11 +48,9 @@ const App = () => {
   });
 
   const handleFetchStories = useCallback(() => {
-    if (!searchTerm === '') return;
-
     dispatchStories({ type: 'STORIES_FETCH_INIT' });
 
-    fetch(`${API_ENDPOINT}${searchTerm}`)
+    fetch(url)
       .then((response) => response.json())
       .then((result) => {
         dispatchStories({
@@ -61,11 +60,11 @@ const App = () => {
       })
 
       .catch(() => dispatchStories({ type: 'STORIES_FETCH_FAILURE' }));
-  }, [searchTerm]);
+  }, [url]);
 
-  useEffect(() =>{
-    handleFetchStories()
-  },[handleFetchStories])
+  useEffect(() => {
+    handleFetchStories();
+  }, [handleFetchStories]);
 
   const handleRemoveStory = (item) => {
     dispatchStories({
@@ -74,9 +73,13 @@ const App = () => {
     });
   };
 
-  function handleSearch(e) {
+  const handleSearchInput = (e) => {
     setSearchTerm(e.target.value);
-  }
+  };
+
+  const handleSearchSubmit = () => {
+    setUrl(`${API_ENDPOINT}${searchTerm}`);
+  };
 
   return (
     <div>
@@ -85,10 +88,15 @@ const App = () => {
         id="search"
         value={searchTerm}
         isFocused
-        onInputChange={handleSearch}
+        onInputChange={handleSearchInput}
       >
         <strong>Search:</strong>
       </InputWithLabel>
+
+      <button type="button" disabled={!searchTerm} onClick={handleSearchSubmit}>
+        Submit
+      </button>
+
       <hr />
       {stories.isError && <p>Something went wrong ...</p>}
       {stories.isLoading ? (
