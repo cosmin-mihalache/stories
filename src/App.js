@@ -1,6 +1,6 @@
 import React, { useEffect, useReducer, useCallback, useState } from 'react';
 import axios from 'axios';
-import InputWithLabel from './components/InputWithLabel';
+import SearchForm from './components/SearchForm';
 import List from './components/List';
 import useSemiPersistentState from './hooks/useSemiPersistentState';
 
@@ -78,26 +78,20 @@ const App = () => {
     setSearchTerm(e.target.value);
   };
 
-  const handleSearchSubmit = () => {
+  const handleSearchSubmit = (event) => {
     setUrl(`${API_ENDPOINT}${searchTerm}`);
+
+    event.preventDefault();
   };
 
   return (
     <div>
       <h1>Hello React</h1>
-      <InputWithLabel
-        id="search"
-        value={searchTerm}
-        isFocused
-        onInputChange={handleSearchInput}
-      >
-        <strong>Search:</strong>
-      </InputWithLabel>
-
-      <button type="button" disabled={!searchTerm} onClick={handleSearchSubmit}>
-        Submit
-      </button>
-
+      <SearchForm
+        searchTerm={searchTerm}
+        onSearchInput={handleSearchInput}
+        onSearchSubmit={handleSearchSubmit}
+      />
       <hr />
       {stories.isError && <p>Something went wrong ...</p>}
       {stories.isLoading ? (
