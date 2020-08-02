@@ -3,6 +3,7 @@ import axios from 'axios';
 import SearchForm from './components/SearchForm';
 import List from './components/List';
 import useSemiPersistentState from './hooks/useSemiPersistentState';
+import './App.css';
 
 const API_ENDPOINT = 'https://hn.algolia.com/api/v1/search?query=';
 
@@ -85,14 +86,14 @@ const App = () => {
   };
 
   return (
-    <div>
-      <h1>Hello React</h1>
+    <div className="container">
+      <h1 className="headline-primary">Stories</h1>
       <SearchForm
         searchTerm={searchTerm}
         onSearchInput={handleSearchInput}
         onSearchSubmit={handleSearchSubmit}
       />
-      <hr />
+
       {stories.isError && <p>Something went wrong ...</p>}
       {stories.isLoading ? (
         <p>Loading...</p>
